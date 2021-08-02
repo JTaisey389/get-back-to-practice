@@ -39,3 +39,9 @@ socket.on('message', (data) => {
   console.log(chalk.green(username + ':' + User_Message.split('\n')[0]));
   socket.emit('chat message', data);
 })
+
+socket.on('private message', (data) => {
+  const { User_Message, username } = data;
+  console.log(chalk.red(username + ':' + User_Message.split('\n')[0]));
+  socket.emit('chat message', data);
+})
