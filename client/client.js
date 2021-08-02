@@ -38,10 +38,26 @@ socket.on('message', (data) => {
   const { User_Message, username } = data;
   console.log(chalk.green(username + ':' + User_Message.split('\n')[0]));
   socket.emit('chat message', data);
-})
+});
 
 socket.on('private message', (data) => {
   const { User_Message, username } = data;
   console.log(chalk.red(username + ':' + User_Message.split('\n')[0]));
   socket.emit('chat message', data);
-})
+});
+
+socket.on('message list', (data) => {
+  data.allMessages.forEach((chatMessage) => {
+    const { User_Message, username } = chatMessage;
+    // Creating the edge case for if the user's message is intended to be sent privately
+    if (!chatMessage.privateReceiver) {
+      console.log(chalk.red(username + ':' + User_Message.split('\n')[0]));
+    } 
+    // Otherwise if the username matches the data of the current user or the data matches the private receiver then we console lof the results 
+    else {
+      if (username === data.currentUser || data.currentUser === chatMessage.privateReceiver) {
+        console.log(chalk.yellow(username + ':' + User_Message.split('\n')[0]));
+      };
+    };
+  });
+});
