@@ -61,3 +61,26 @@ socket.on('message list', (data) => {
     };
   });
 });
+
+repl.start({
+  prompt: '',
+  eval: (User_Message) => {
+    
+    // Our first conditional for the regex to filter the private messages, the users message would need to match the first regex
+    let regex1 = /(\S+\w+\s+){2}/gm;
+    let regex1String = User_Message.match(regex1);
+
+    let messageConstructor = User_Message.split('');
+    let messageType = messageConstructor[0];
+
+    let privateReceiver = null;
+    // creating the edge case for the private receiver to match the message type with the key of "/to"
+    if(messageType === '/to') {
+      socket.emit('private message', { username, User_Message, privateReceiver, messageType });
+    }
+    // otherwise we can emit the messages any users send
+    else {
+      socket.emit('message', { User_Message, username });
+    };
+  }
+});
