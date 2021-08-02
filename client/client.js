@@ -26,4 +26,16 @@ socket.on('connect', () => {
     console.log(chalk.cyan('** Enter /to (user) to send a private Message'));
     console.log(chalk.magentaBright('-------------------------------'));
   })
+
+  console.log(chalk.magentaBright('-----Chatty Kathie-----'));
+})
+
+socket.on('disconnect', () => {
+  console.log(`User ${username}, left the chatroom`)
+});
+
+socket.on('message', (data) => {
+  const { User_Message, username } = data;
+  console.log(chalk.green(username + ':' + User_Message.split('\n')[0]));
+  socket.emit('chat message', data);
 })
